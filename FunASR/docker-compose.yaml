@@ -1,0 +1,67 @@
+services:
+  funasr-base:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: funasr-base:latest
+    container_name: funasr-base
+    profiles:
+      - base
+
+  funasr-dev:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    image: funasr-dev:latest
+    container_name: funasr-dev
+    depends_on:
+      - funasr-base
+    profiles:
+      - dev
+
+  export:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.export
+    image: funasr:latest
+    container_name: funasr
+    depends_on:
+      - funasr-base
+    profiles:
+      - export
+
+  model:
+    image: funasr-dev:latest
+    container_name: funasr-model
+    restart: unless-stopped # unless-stopped 除非手动停止，否则自动重启。 always 始终重启
+    privileged: true # 这个配置用于给容器更高的权限，允许容器访问宿主机的设备和内核
+    logging:
+      driver: "json-file" # 有配置可以将日志转发到其他日志管理系统
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: "all"
+              capabilities: [gpu]
+    # ports:
+    #   - "8188:8188"
+    # - "9881:9881"
+    volumes:
+      - .:/workspace # 将当前目录挂载到容器
+      - E:/models/funasr:/models
+    working_dir: /workspace
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - HF_ENDPOINT = https://hf-mirror.com
+    # env_file:
+    #   - .env
+    # tty: true # 分配一个伪终端
+    # stdin_open: true # 通常与 tty: true 一起使用，将创建 stdin 用于交互
+
+    # command: ["poetry", "run", "python", "main.py", "--listen", "0.0.+0.0"]
+    # command: ["python", "main.py", "--listen", "0.0.0.0"]
+    command: ["sleep", "infinity"]

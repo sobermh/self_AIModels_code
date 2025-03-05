@@ -1,0 +1,12 @@
+FROM comfyui-base:latest
+
+WORKDIR /workspace
+ARG PROJECT_ROOT=.
+
+RUN --mount=type=cache,target=$POETRY_CACHE_DIR,sharing=locked \
+  set -e;\
+  poetry install --no-root --no-interaction --no-ansi --only=dev;
+
+
+
+

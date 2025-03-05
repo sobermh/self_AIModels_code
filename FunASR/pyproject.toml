@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "FunasrProject"
+version = "0.1.0"
+description = ""
+authors = ["sobermh <sobermh09@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.14"
+setuptools = "*"
+
+
+# funasr
+torch = ">=2.4.0+cu124"
+torchaudio = "*"
+funasr = "*"
+modelscope = "*"
+huggingface_hub = "*"
+
+
+# aicenter
+nanoid = "^2.0.0"
+
+# proxy
+httpx = { version = "*", extras = ["socks"] }
+
+
+[tool.poetry.group.dev.dependencies]
+debugpy = "^1.8.6"
+pytest = "^8.3.3"
+watchfiles = "*"
+
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "onnxruntime-cuda"
+url = "https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/"
+priority = "supplemental"
+
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "supplemental"
+
+
+[[tool.poetry.source]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+
+[build-system]
+requires = ["poetry-core", "setuptools", "wheel", "setuptools-cpp"]
+build-backend = "poetry.core.masonry.api"
