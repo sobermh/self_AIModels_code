@@ -1,0 +1,46 @@
+services:
+  model:
+    build:
+      context: . # 指定 Dockerfile 所在的目录
+      dockerfile: Dockerfile
+    image: sobermh/liveportrail:latest # 构建后生成的镜像名称
+    container_name: liveportrail # 容器名称
+    # networks:
+    #   ai_network:
+    #     driver: bridge # 默认驱动类型，创建一个桥接网络
+
+    ports:
+      - "9877:9877"
+    volumes:
+      - .:/workspace # 将当前目录挂载到容器
+    working_dir: /workspace
+    environment:
+      - MODEL_NAME=liveportrail # 示例：设置环境变量
+    # env_file:
+    #   - .env
+    # restart: unless-stopped # unless-stopped 除非手动停止，否则自动重启。 always 始终重启
+    # tty: true # 分配一个伪终端
+    # stdin_open: true # 通常与 tty: true 一起使用，将创建 stdin 用于交互
+    privileged: true # 这个配置用于给容器更高的权限，允许容器访问宿主机的设备和内核
+    logging:
+      driver: "json-file" # 有配置可以将日志转发到其他日志管理系统
+      options:
+        max-size: "10m"
+        max-file: "10"
+    runtime: nvidia # 明确指定使用 NVIDIA GPU
+    deploy:
+      # replicas: 3 # Swarm 模式的功能启动 3个容器实例
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: "all"
+              capabilities: [ gpu ]
+    #     limits:
+    #       memory: 2G # 限制容器使用的最大内存
+    #       cpus: "1.0" # 限制容器使用的 CPU 核心
+    #     reservations:
+    #       memory: 1G # 保证至少使用多少内存
+    command: [ "python", "app.py", "--server_port=9877", "--server_name=0.0.0.0" ]
+ 76 changes: 76 additions & 0 deletions76  
+dockerfile

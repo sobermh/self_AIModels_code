@@ -1,0 +1,76 @@
+FROM nvidia/cuda:12.5.1-cudnn-runtime-ubuntu22.04
+
+
+LABEL maintainer="sobermh09@gmail.com"
+LABEL version="dev-20241213"
+LABEL description="Docker image for LivePortrait"
+
+ENV TZ=Asia/Shanghai \
+    DEBIAN_FRONTEND=noninteractive
+
+# 安装 tzdata 并设置时区
+RUN set -e;\
+    apt-get update && \
+    apt-get install -y tzdata && \
+    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
+
+
+RUN set -e;\
+    sed -i 's|http://archive.ubuntu.com/ubuntu/|https://mirrors.aliyun.com/ubuntu/|g' /etc/apt/sources.list && \
+    apt-get update
+
+# environment
+RUN set -e;\
+    apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    ffmpeg \
+    build-essential \
+    libssl-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# python depends
+RUN set -e;\
+    apt-get update && apt-get install -y \
+    build-essential \
+    zlib1g-dev \
+    libffi-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    liblzma-dev
+
+# python
+RUN set -e;\
+    curl -O https://www.python.org/ftp/python/3.10.12/Python-3.10.12.tar.xz && \
+    tar -xf Python-3.10.12.tar.xz && \
+    cd Python-3.10.12 && \
+    ./configure --enable-optimizations && \
+    make -j$(nproc) && \
+    make altinstall && \
+    cd .. && rm -rf Python-3.10.12*
+
+RUN set -e;\
+    ln -s /usr/local/bin/python3.10 /usr/bin/python && \
+    ln -s /usr/local/bin/pip3.10 /usr/bin/pip
+
+WORKDIR /workspace
+
+COPY . /workspace
+
+
+RUN set -e;\
+    pip install torch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 --extra-index-url https://download.pytorch.org/whl/cu121
+
+
+RUN set -e;\
+    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip config set install.trusted-host pypi.tuna.tsinghua.edu.cn && \
+    pip install --no-cache-dir -r requirements.txt
+
+CMD [ "bash" , "-c" , "python app.py --flag_do_torch_compile" ]
+# CMD ["python","app_animals.py"]
