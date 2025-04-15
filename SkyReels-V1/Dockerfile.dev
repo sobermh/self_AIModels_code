@@ -1,0 +1,14 @@
+FROM skyreels-v1-base:latest
+
+WORKDIR /workspace
+ARG PROJECT_ROOT=.
+
+COPY ./SkyReels-V1/requirements.txt ./
+
+RUN --mount=type=cache,sharing=locked \
+  set -e;\
+  pip install -r requirements.txt
+
+
+
+
