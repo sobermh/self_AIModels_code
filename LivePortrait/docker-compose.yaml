@@ -35,12 +35,10 @@ services:
           devices:
             - driver: nvidia
               count: "all"
-              capabilities: [ gpu ]
+              capabilities: [gpu]
     #     limits:
     #       memory: 2G # 限制容器使用的最大内存
     #       cpus: "1.0" # 限制容器使用的 CPU 核心
     #     reservations:
     #       memory: 1G # 保证至少使用多少内存
-    command: [ "python", "app.py", "--server_port=9877", "--server_name=0.0.0.0" ]
- 76 changes: 76 additions & 0 deletions76  
-dockerfile
+    command: ["python", "app.py", "--server_port=9877", "--server_name=0.0.0.0"]
