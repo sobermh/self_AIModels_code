@@ -1,4 +1,6 @@
-# models
+# AIModels
+
+ai 模型的 docker 部署及拓展文件
 
 # 提交规范
 
