@@ -3,8 +3,13 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: ${PROJECT_NAME}-base:latest
-    container_name: ${PROJECT_NAME}-base
+      args:
+        PROJECT_PATH: ${PROJECT_PATH}
+        PROJECT_NAME: ${PROJECT_NAME}
+        DOCKER_NAME: ${DOCKER_NAME}
+        DOCKER_BASE_IMAGE: ${DOCKER_BASE_IMAGE}
+    image: ${DOCKER_NAME}-base:latest
+    container_name: ${DOCKER_NAME}-base
     profiles:
       - base
 
@@ -12,16 +17,36 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.dev
-    image: ${PROJECT_NAME}-dev:latest
-    container_name: ${PROJECT_NAME}-dev
+      args:
+        PROJECT_PATH: ${PROJECT_PATH}
+        PROJECT_NAME: ${PROJECT_NAME}
+        DOCKER_NAME: ${DOCKER_NAME}
+        DOCKER_BASE_IMAGE: ${DOCKER_BASE_IMAGE}
+    image: ${DOCKER_NAME}-dev:latest
+    container_name: ${DOCKER_NAME}-dev
     depends_on:
       - base
     profiles:
       - dev
 
+  export:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.export
+      args:
+        PROJECT_PATH: ${PROJECT_PATH}
+        PROJECT_NAME: ${PROJECT_NAME}
+        DOCKER_NAME: ${DOCKER_NAME}
+    image: ${DOCKER_NAME}-export:latest
+    container_name: ${DOCKER_NAME}-export
+    depends_on:
+      - base
+    profiles:
+      - export
+
   model:
-    image: ${PROJECT_NAME}-dev:latest
-    container_name: ${PROJECT_NAME}-model
+    image: ${DOCKER_NAME}-dev:latest
+    container_name: ${DOCKER_NAME}-model
     restart: unless-stopped # unless-stopped 除非手动停止，否则自动重启。 always 始终重启
     privileged: true # 这个配置用于给容器更高的权限，允许容器访问宿主机的设备和内核
     logging:
@@ -37,7 +62,7 @@ services:
               count: "all"
               capabilities: [gpu]
     volumes:
-      - ./SkyReels-V1:/workspace # 将当前目录挂载到容器
+      - ${PROJECT_PATH}:/workspace # 将当前目录挂载到容器
     working_dir: /workspace
     environment:
       - GRADIO_SERVER_NAME=0.0.0.0

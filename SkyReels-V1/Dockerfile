@@ -54,4 +54,7 @@ RUN --mount=type=cache,target=/root/.pyenv/cache,sharing=locked \
     pyenv install ${PYTHON_VERSION} &&\
     pyenv global ${PYTHON_VERSION} &&\
     pyenv rehash
-
+# link python and pip
+RUN set -e && \
+    ln -sf $(pyenv which python) /usr/local/bin/python && \
+    ln -sf $(pyenv which pip) /usr/local/bin/pip
