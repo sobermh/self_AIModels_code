@@ -19,7 +19,7 @@ git add . && git commit -m "feat: add new feature" && git push
 git add . && git commit -m "fix: fix docker compose bug" && git push
 git add . && git commit -m "docs: update README.md" && git push
 git add . && git commit -m "style: format code" && git push
-git add . && git commit -m "refactor: refactor code" && git push
+git add . && git commit -m "refactor: refactor annotation code" && git push
 git add . && git commit -m "test: add test" && git push
 git add . && git commit -m "chore: build process or auxiliary tool changes" && git push
 
