@@ -16,7 +16,7 @@ ai 模型的 docker 部署及拓展文件
 
 ```
 git add . && git commit -m "feat: add new feature" && git push
-git add . && git commit -m "fix: fix bug" && git push
+git add . && git commit -m "fix: fix docker compose bug" && git push
 git add . && git commit -m "docs: update README.md" && git push
 git add . && git commit -m "style: format code" && git push
 git add . && git commit -m "refactor: refactor code" && git push

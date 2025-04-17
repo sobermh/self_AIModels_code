@@ -6,4 +6,5 @@ export DOCKER_BASE_IMAGE=${DOCKER_NAME}-base:latest
 export PROJECT_NAME=SkyReels-V1
 export PROJECT_PATH=./${PROJECT_NAME}
 
-docker-compose --profile base --profile dev build && docker-compose --profile base --profile dev up
+docker compose --profile base --profile dev build && docker compose --profile base --profile dev up
+
