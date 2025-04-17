@@ -1,15 +1,14 @@
 #!/bin/bash
 
 ########################################
-# !!!!!!在ubunut上执行COPY失败，windows上的git bash执行成功。
+# 构建docker镜像并启动容器服务
 ########################################
 
-link.sh
 
-export DOCKER_NAME=skyreels-v1
-export DOCKER_BASE_IMAGE=${DOCKER_NAME}-base:latest
-export PROJECT_NAME=SkyReels-V1
-export PROJECT_PATH=./${PROJECT_NAME}
 
-docker compose --profile base --profile dev build && docker compose --profile base --profile dev up
+source env.sh
 
+# ln -s ../models/SkyReels-V1 ./ # 不能用软链接，不然docker COPY的话，路径会找到源文件路径
+cp -rf ../models/SkyReels-V1 ./
+
+docker compose --profile base --profile dev build  && docker compose --profile base --profile dev up -d

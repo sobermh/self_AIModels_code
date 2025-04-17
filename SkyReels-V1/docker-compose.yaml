@@ -7,7 +7,7 @@ services:
         PROJECT_PATH: ${PROJECT_PATH}
         PROJECT_NAME: ${PROJECT_NAME}
         DOCKER_NAME: ${DOCKER_NAME}
-        DOCKER_BASE_IMAGE: ${DOCKER_BASE_IMAGE}
+        DOCKER_BASE_IMAGE: ${DOCKER_NAME}-base:latest
     image: ${DOCKER_NAME}-base:latest
     container_name: ${DOCKER_NAME}-base
     profiles:
@@ -21,7 +21,7 @@ services:
         PROJECT_PATH: ${PROJECT_PATH}
         PROJECT_NAME: ${PROJECT_NAME}
         DOCKER_NAME: ${DOCKER_NAME}
-        DOCKER_BASE_IMAGE: ${DOCKER_BASE_IMAGE}
+        DOCKER_BASE_IMAGE: ${DOCKER_NAME}-base:latest
     image: ${DOCKER_NAME}-dev:latest
     container_name: ${DOCKER_NAME}-dev
     depends_on:
@@ -29,20 +29,21 @@ services:
     profiles:
       - dev
 
-  export:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.export
-      args:
-        PROJECT_PATH: ${PROJECT_PATH}
-        PROJECT_NAME: ${PROJECT_NAME}
-        DOCKER_NAME: ${DOCKER_NAME}
-    image: ${DOCKER_NAME}-export:latest
-    container_name: ${DOCKER_NAME}-export
-    depends_on:
-      - base
-    profiles:
-      - export
+  # export:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile.export
+  #     args:
+  #       PROJECT_PATH: ${PROJECT_PATH}
+  #       PROJECT_NAME: ${PROJECT_NAME}
+  #       DOCKER_NAME: ${DOCKER_NAME}
+  #       DOCKER_BASE_IMAGE: ${DOCKER_BASE_IMAGE}
+  #   image: ${DOCKER_NAME}-export:latest
+  #   container_name: ${DOCKER_NAME}-export
+  #   depends_on:
+  #     - base
+  #   profiles:
+  #     - export
 
   model:
     image: ${DOCKER_NAME}-dev:latest

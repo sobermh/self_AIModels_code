@@ -49,7 +49,7 @@ RUN set -e &&\
 ARG PYTHON_VERSION=3.10.14
 ARG PYTHON_VERSION_MINMAX=3.10
 # install python
-RUN --mount=type=cache,target=/root/.pyenv/cache,sharing=locked \ 
+RUN --mount=type=cache,target=/root/.cache/pyenv,sharing=locked \ 
     set -e &&\
     pyenv install ${PYTHON_VERSION} &&\
     pyenv global ${PYTHON_VERSION} &&\

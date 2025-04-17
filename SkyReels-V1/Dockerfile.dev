@@ -9,10 +9,9 @@ ARG DOCKER_NAME
 
 COPY ${PROJECT_PATH}/requirements.txt ./
 
-
-RUN --mount=type=cache,sharing=locked \
-  set -e && \
-  pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+  set -e;\
+  pip install  -r ./requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 
 
