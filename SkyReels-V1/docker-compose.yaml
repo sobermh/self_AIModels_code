@@ -66,7 +66,7 @@ services:
     working_dir: /workspace
     environment:
       - GRADIO_SERVER_NAME=0.0.0.0
-      - HF_ENDPOINT = https://hf-mirror.com
+      - HF_ENDPOINT=https://hf-mirror.com
     # env_file:
     #   - .env
     # tty: true # 分配一个伪终端
