@@ -1,0 +1,40 @@
+# default-dmeo is a no sense image for aviod warning , real image is ${DOCKER_BASE_IMAGE} from docker-compose.yaml
+ARG DOCKER_BASE_IMAGE=default-dmeo 
+FROM ${DOCKER_BASE_IMAGE}
+
+WORKDIR /workspace
+ARG PROJECT_PATH
+ARG PROJECT_NAME
+ARG DOCKER_NAME
+
+COPY ${PROJECT_PATH}/requirements.txt ./
+COPY ${PROJECT_PATH}/setup_env.sh ./
+
+# 安装miniconda
+RUN --mount=type=cache,target=/root/.cache/miniconda,sharing=locked \
+    set -e && \
+    wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/Miniconda3-latest-Linux-x86_64.sh && \
+    bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /root/miniconda3 && \
+    rm /tmp/Miniconda3-latest-Linux-x86_64.sh
+
+# 设置 Conda 环境变量
+ENV PATH="/root/miniconda3/bin:$PATH"
+
+# Create a new conda environment
+RUN conda create -y -n latentsync python=3.10.13 && \
+    conda install -y -n latentsync -c conda-forge ffmpeg
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    conda run -n latentsync pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+RUN apt-get update && apt-get -y install libgl1
+
+RUN set -e && \
+    conda run -n latentsync huggingface-cli download ByteDance/LatentSync-1.5 whisper/tiny.pt --local-dir checkpoints && \
+    conda run -n latentsync huggingface-cli download ByteDance/LatentSync-1.5 latentsync_unet.pt --local-dir checkpoints
+
+# RUN --mount=type=cache,target=/root/.cache/latentsync,sharing=locked \
+#     set -e && \
+#     sed -i 's/\r$//' ./setup_env.sh && \
+#     chmod +x ./setup_env.sh && \
+#     ./setup_env.sh

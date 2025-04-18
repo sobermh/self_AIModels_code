@@ -1,3 +1,6 @@
 [submodule "models/SkyReels-V1"]
 	path = models/SkyReels-V1
 	url = git@github.com:SkyworkAI/SkyReels-V1.git
+[submodule "models/LatentSync"]
+	path = models/LatentSync
+	url = git@github.com:bytedance/LatentSync.git

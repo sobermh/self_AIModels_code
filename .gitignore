@@ -1,2 +1,11 @@
+
+
+# 模型
 SkyReels-V1/SkyReels-V1/
 SkyReels-V1/*.tar
+
+LatentSync/LatentSync/
+
+# 日志
+*.log
+
