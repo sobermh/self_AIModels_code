@@ -1,0 +1,32 @@
+# default-dmeo is a no sense image for aviod warning , real image is ${DOCKER_BASE_IMAGE} from docker-compose.yaml
+ARG DOCKER_BASE_IMAGE=default-dmeo 
+FROM ${DOCKER_BASE_IMAGE}
+
+WORKDIR /workspace
+ARG PROJECT_PATH
+ARG PROJECT_NAME
+ARG DOCKER_NAME
+
+COPY ${PROJECT_PATH}/requirements.txt ./
+
+# 安装 CUDA Toolkit（含 nvcc）到 runtime 镜像中
+RUN apt-get update && apt-get install -y wget gnupg2 && \
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
+    dpkg -i cuda-keyring_1.1-1_all.deb && \
+    apt-get update && \
+    apt-get install -y cuda-toolkit-12-5 && \
+    rm -rf /var/lib/apt/lists/*
+# 设置环境变量（确保 nvcc 可用）
+ENV PATH=/usr/local/cuda/bin:${PATH} \
+    CUDA_HOME=/usr/local/cuda
+
+
+
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+  set -e;\
+  pip install "numpy>=1.23.5,<2" -i https://pypi.tuna.tsinghua.edu.cn/simple;\
+  pip install torch -i https://pypi.tuna.tsinghua.edu.cn/simple;\
+  pip install --upgrade pip setuptools wheel packaging -i https://pypi.tuna.tsinghua.edu.cn/simple ;\
+  pip install  -r ./requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+
