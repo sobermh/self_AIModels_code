@@ -1,4 +1,4 @@
-export PROJECT_NAME=SkyReels-A2
+export PROJECT_NAME=VACE
 
 git submodule deinit -f models/$PROJECT_NAME && \
 git rm -f models/$PROJECT_NAME && \

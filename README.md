@@ -15,12 +15,12 @@ ai 模型的 docker 部署及拓展文件
 # 提交示例
 
 ```
-git add . && git commit -m "feat: add new feature" && git push
-git add . && git commit -m "fix: fix docker compose bug" && git push
-git add . && git commit -m "docs: update README.md" && git push
-git add . && git commit -m "style: format code" && git push
-git add . && git commit -m "refactor: refactor annotation code" && git push
-git add . && git commit -m "test: add test" && git push
-git add . && git commit -m "chore: update docker build process" && git push
+git add . && git commit -m "Feat: add new feature" && git push
+git add . && git commit -m "Fix: fix docker compose bug" && git push
+git add . && git commit -m "Docs: update README.md" && git push
+git add . && git commit -m "Style: format code" && git push
+git add . && git commit -m "Refactor: refactor annotation code" && git push
+git add . && git commit -m "Test: add test" && git push
+git add . && git commit -m "Chore: update docker build process" && git push
 
 ```

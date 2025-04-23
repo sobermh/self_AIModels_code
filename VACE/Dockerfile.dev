@@ -1,0 +1,27 @@
+# default-dmeo is a no sense image for aviod warning , real image is ${DOCKER_BASE_IMAGE} from docker-compose.yaml
+ARG DOCKER_BASE_IMAGE=default-dmeo 
+FROM ${DOCKER_BASE_IMAGE}
+
+WORKDIR /workspace
+ARG PROJECT_PATH
+ARG PROJECT_NAME
+ARG DOCKER_NAME
+
+COPY ${PROJECT_PATH}/requirements.txt ./
+RUN mkdir -p ./requirements 
+COPY ${PROJECT_PATH}/requirements/annotator.txt ./requirements
+COPY ${PROJECT_PATH}/requirements/framework.txt ./requirements
+
+
+
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+  set -e;\
+  pip install torch==2.5.1 torchvision==0.20.1 -f https://mirrors.aliyun.com/pytorch-wheels/cu124;\
+  pip install  -r ./requirements/framework.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple;\
+  pip install wan@git+https://github.com/Wan-Video/Wan2.1;\
+  pip install ltx-video@git+https://github.com/Lightricks/LTX-Video@ltx-video-0.9.1 sentencepiece --no-deps;\
+  pip install -r ./requirements/annotator.txt
+
+
+
+

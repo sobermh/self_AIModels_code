@@ -1,9 +1,12 @@
 [submodule "models/SkyReels-V1"]
 	path = models/SkyReels-V1
-	url = git@github.com:SkyworkAI/SkyReels-V1.git
+	url = https://github.com/SkyworkAI/SkyReels-V1.git
 [submodule "models/LatentSync"]
 	path = models/LatentSync
-	url = git@github.com:bytedance/LatentSync.git
+	url = https://github.com/bytedance/LatentSync.git
 [submodule "models/Wan2.1"]
 	path = models/Wan2.1
 	url = https://github.com/Wan-Video/Wan2.1.git
+[submodule "models/VACE"]
+	path = models/VACE
+	url = https://github.com/ali-vilab/VACE.git
